@@ -1,0 +1,12 @@
+Font
+  name: roboto-14px
+  ttf-file: Roboto-Regular.ttf
+  font-size: 18
+  atlas-size: 1024 1024
+  glyph-range: 32 255
+  oversample: 2 2
+  spacing: 1 0
+  space-width: 6
+  outline-thickness: 1
+  outline-color: #000000ff
+

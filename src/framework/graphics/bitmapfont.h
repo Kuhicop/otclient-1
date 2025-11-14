@@ -25,6 +25,10 @@
 #include "bitmapfontwrapoptions.h"
 #include "declarations.h"
 #include <framework/otml/declarations.h>
+#include <framework/util/color.h>
+#include <array>
+#include <cstdint>
+#include <vector>
 
 class BitmapFont
 {
@@ -74,14 +78,21 @@ public:
     inline int getGlyphHeight() const noexcept { return m_glyphHeight; }
     inline const Rect* getGlyphsTextureCoords() noexcept { return m_glyphsTextureCoords; }
     inline const Size* getGlyphsSize() noexcept { return m_glyphsSize; }
+    inline const Point* getGlyphsOffsets() noexcept { return m_glyphsOffset; }
+    inline const int* getGlyphsAdvance() noexcept { return m_glyphsAdvance; }
     inline const TexturePtr& getTexture() const noexcept { return m_texture; }
     inline int getYOffset() const noexcept { return m_yOffset; }
     inline Size getGlyphSpacing() const noexcept { return m_glyphSpacing; }
+    inline bool hasOutline() const noexcept { return m_outlineThickness > 0 && !m_outlineOffsets.empty(); }
+    inline int getOutlineThickness() const noexcept { return m_outlineThickness; }
+    inline const Color& getOutlineColor() const noexcept { return m_outlineColor; }
+    inline const std::vector<Point>& getOutlineOffsets() const noexcept { return m_outlineOffsets; }
     const AtlasRegion* getAtlasRegion() const noexcept;
 
 private:
     void calculateGlyphsWidthsAutomatically(const ImagePtr& image, const Size& glyphSize);
     void updateColors(std::vector<std::pair<int, Color>>* colors, int pos, int newTextLen) noexcept;
+    void updateOutlineOffsets();
 
     static inline bool isSpace(unsigned char c) noexcept {
         return c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v' || c == '\f';
@@ -97,4 +108,10 @@ private:
     TexturePtr m_texture;
     Rect m_glyphsTextureCoords[256];
     Size m_glyphsSize[256];
+    Point m_glyphsOffset[256];
+    int m_glyphsAdvance[256]{ };
+    std::array<std::array<int16_t, 256>, 256> m_kerning{};
+    int m_outlineThickness{ 0 };
+    Color m_outlineColor{ Color::black };
+    std::vector<Point> m_outlineOffsets;
 };

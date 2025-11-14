@@ -430,6 +430,7 @@
     <ClCompile Include="..\src\framework\graphics\texture.cpp" />
     <ClCompile Include="..\src\framework\graphics\textureatlas.cpp" />
     <ClCompile Include="..\src\framework\graphics\texturemanager.cpp" />
+    <ClCompile Include="..\src\framework\graphics\truetypefont.cpp" />
     <ClCompile Include="..\src\framework\html\cssparser.cpp" />
     <ClCompile Include="..\src\framework\html\htmlmanager.cpp" />
     <ClCompile Include="..\src\framework\html\htmlnode.cpp" />
@@ -603,9 +604,11 @@
     <ClInclude Include="..\src\framework\graphics\drawpool.h" />
     <ClInclude Include="..\src\framework\graphics\shader.h" />
     <ClInclude Include="..\src\framework\graphics\shaderprogram.h" />
+    <ClInclude Include="..\src\framework\graphics\stb_truetype.h" />
     <ClInclude Include="..\src\framework\graphics\texture.h" />
     <ClInclude Include="..\src\framework\graphics\textureatlas.h" />
     <ClInclude Include="..\src\framework\graphics\texturemanager.h" />
+    <ClInclude Include="..\src\framework\graphics\truetypefont.h" />
     <ClInclude Include="..\src\framework\graphics\vertexarray.h" />
     <ClInclude Include="..\src\framework\html\cssparser.h" />
     <ClInclude Include="..\src\framework\html\declarations.h" />

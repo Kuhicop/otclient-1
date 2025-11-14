@@ -959,6 +959,8 @@ protected:
     std::vector<std::pair<int, Color>> m_drawTextColors;
 
     CoordsBufferPtr m_coordsBuffer;
+    std::vector<CoordsBufferPtr> m_outlineCoordsBuffer;
+    Rect m_outlineCachedScreenCoords;
     std::vector<std::pair<Color, CoordsBufferPtr>> m_colorCoordsBuffer;
 
     float m_fontScale{ 1.f };

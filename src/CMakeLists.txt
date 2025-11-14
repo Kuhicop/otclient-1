@@ -398,6 +398,7 @@ if (TOGGLE_FRAMEWORK_GRAPHICS)
           framework/graphics/particleeffect.cpp
           framework/graphics/particleemitter.cpp
           framework/graphics/particlemanager.cpp
+          framework/graphics/truetypefont.cpp
           framework/graphics/particlesystem.cpp
           framework/graphics/particletype.cpp
           framework/graphics/shader.cpp

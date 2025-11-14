@@ -23,40 +23,35 @@
 #pragma once
 
 #include "declarations.h"
+#include <array>
+#include <cstdint>
 
-class CachedText
+struct TrueTypeFontSettings
+{
+    std::string file;
+    float pixelSize{ 16.f };
+    Size atlasSize{ 512, 512 };
+    Size oversample{ 1, 1 };
+    int firstGlyph{ 32 };
+    int lastGlyph{ 255 };
+    int padding{ 1 };
+};
+
+struct TrueTypeFontBuildResult
+{
+    ImagePtr atlasImage;
+    std::array<Rect, 256> textureCoords{};
+    std::array<Size, 256> glyphSize{};
+    std::array<Point, 256> glyphOffset{};
+    std::array<int, 256> glyphAdvance{};
+    int glyphHeight{ 0 };
+    int baseline{ 0 };
+    std::array<std::array<int16_t, 256>, 256> kerning{};
+};
+
+class TrueTypeFontBuilder
 {
 public:
-    CachedText();
-
-    void draw(const Rect& rect, const Color& color);
-
-    void wrapText(int maxWidth);
-    void setFont(const BitmapFontPtr& font);
-    void setText(std::string_view text);
-    void setAlign(Fw::AlignmentFlag align);
-
-    Size getTextSize() const { return m_textSize; }
-    std::string getText() const { return m_text; }
-    bool hasText() const { return !m_text.empty(); }
-    BitmapFontPtr getFont() const { return m_font; }
-    Fw::AlignmentFlag getAlign() const { return m_align; }
-
-private:
-    void update();
-
-    std::vector<std::pair<Rect, Rect>> m_TextureCoords;
-    std::vector<Point> m_glyphsPositions;
-
-    std::string m_text;
-    Size m_textSize;
-    Rect m_textScreenCoords;
-    BitmapFontPtr m_font;
-    Fw::AlignmentFlag m_align;
-
-    const AtlasRegion* m_atlasRegion = nullptr;
-
-    CoordsBufferPtr m_coordsBuffer;
-    std::vector<CoordsBufferPtr> m_outlineBuffers;
-    Rect m_outlineScreenCoords;
+    TrueTypeFontBuildResult build(const TrueTypeFontSettings& settings) const;
 };
+

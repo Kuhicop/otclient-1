@@ -44,6 +44,32 @@ void CachedText::draw(const Rect& rect, const Color& color)
         m_font->fillTextCoords(m_coordsBuffer, m_text, m_textSize, m_align, rect, m_glyphsPositions);
     }
 
+    if (m_font->hasOutline()) {
+        const auto& offsets = m_font->getOutlineOffsets();
+        if (m_outlineBuffers.size() != offsets.size()) {
+            m_outlineBuffers.resize(offsets.size());
+            m_outlineScreenCoords = {};
+        }
+
+        if (m_outlineScreenCoords != rect) {
+            m_outlineScreenCoords = rect;
+            for (size_t i = 0; i < offsets.size(); ++i) {
+                const auto& offset = offsets[i];
+                if (!m_outlineBuffers[i])
+                    m_outlineBuffers[i] = std::make_shared<CoordsBuffer>();
+                m_font->fillTextCoords(m_outlineBuffers[i], m_text, m_textSize, m_align, rect.translated(offset), m_glyphsPositions);
+            }
+        }
+
+        for (const auto& buffer : m_outlineBuffers) {
+            if (buffer)
+                g_drawPool.addTexturedCoordsBuffer(m_font->getTexture(), buffer, m_font->getOutlineColor());
+        }
+    } else if (!m_outlineBuffers.empty()) {
+        m_outlineBuffers.clear();
+        m_outlineScreenCoords = {};
+    }
+
     g_drawPool.addTexturedCoordsBuffer(m_font->getTexture(), m_coordsBuffer, color);
 }
 
@@ -54,6 +80,7 @@ void CachedText::update()
     }
 
     m_textScreenCoords = {};
+    m_outlineScreenCoords = {};
 }
 
 void CachedText::wrapText(const int maxWidth)

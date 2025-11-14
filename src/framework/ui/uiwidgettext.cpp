@@ -217,11 +217,41 @@ void UIWidget::drawText(const Rect& screenCoords)
             m_font->fillTextCoords(m_coordsBuffer, m_drawText, m_textSize, m_textAlign, coords, m_glyphsPositionsCache);
         else
             m_font->fillTextColorCoords(m_colorCoordsBuffer, m_drawText, m_drawTextColors, m_textSize, m_textAlign, coords, m_glyphsPositionsCache);
+
+        if (m_drawTextColors.empty() && m_font->hasOutline()) {
+            const auto& offsets = m_font->getOutlineOffsets();
+            if (m_outlineCoordsBuffer.size() != offsets.size()) {
+                m_outlineCoordsBuffer.resize(offsets.size());
+                m_outlineCachedScreenCoords = {};
+            }
+
+            if (m_outlineCachedScreenCoords != coords) {
+                m_outlineCachedScreenCoords = coords;
+                for (size_t i = 0; i < offsets.size(); ++i) {
+                    const auto& offset = offsets[i];
+                    if (!offset.isNull()) {
+                        if (!m_outlineCoordsBuffer[i])
+                            m_outlineCoordsBuffer[i] = std::make_shared<CoordsBuffer>();
+                        m_font->fillTextCoords(m_outlineCoordsBuffer[i], m_drawText, m_textSize, m_textAlign, coords.translated(offset), m_glyphsPositionsCache);
+                    }
+                }
+            }
+        } else if (m_outlineCoordsBuffer.size()) {
+            m_outlineCoordsBuffer.clear();
+            m_outlineCachedScreenCoords = {};
+        }
     }
 
     g_drawPool.scale(m_fontScale);
     g_drawPool.setDrawOrder(m_textDrawOrder);
     if (m_drawTextColors.empty() || m_colorCoordsBuffer.empty()) {
+        if (m_font->hasOutline()) {
+            const auto& texture = m_font->getTexture();
+            for (const auto& buffer : m_outlineCoordsBuffer) {
+                if (buffer)
+                    g_drawPool.addTexturedCoordsBuffer(texture, buffer, m_font->getOutlineColor());
+            }
+        }
         g_drawPool.addTexturedCoordsBuffer(m_font->getTexture(), m_coordsBuffer, m_color);
     } else {
         const auto& texture = m_font->getTexture();
