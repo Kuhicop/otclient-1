@@ -28,8 +28,11 @@
 ## Preparar vcpkg
 
 cd C:\Users\Adrian\Desktop\OTSERV
+
 git clone https://github.com/microsoft/vcpkg
+
 cd vcpkg
+
 bootstrap-vcpkg.bat
 
 ## Compilar cliente
@@ -37,11 +40,12 @@ bootstrap-vcpkg.bat
 Abrir: x64 Native Tools Command Prompt for VS 2022
 
 set VCPKG_ROOT=C:\Users\Adrian\Desktop\OTSERV\vcpkg
+
 cd C:\Users\Adrian\Desktop\OTSERV\ADREAM\mehah-otclient
 
 mkdir build
-cmake -S . -B build -A x64 ^
-  -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake
+
+cmake -S . -B build -A x64 -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake
 
 cmake --build build --config Release --target otclient
 
@@ -51,8 +55,7 @@ where /r build otclient.exe
 
 ## Cliente 7.6
 
-Crear:
-data\things\760\
+Crear: data\things\760\
 
 Copiar:
 
